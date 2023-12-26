@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org/">
+<head th:replace="~{/admin/header :: header}">
+    <meta charset="UTF-8">
+    <script src="./js/gnb.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/admin/css/admin.css}">
+</head>
+<body>
+    <main>
+    <div th:replace="~{/admin/aside :: aside}"></div>
+    <section id="admin-product-register">
+        <nav>
+            <h3>문의하기 조회</h3>
+            <p>
+                HOME > 고객센터 > <strong>문의하기</strong>
+            </p>
+        </nav>
+        <article>
+            <table class="csInputTable csViewTable">
+                <tr>
+                    <td>유형</td>
+                    <td>
+                        <p th:text="'[' + ${qnaView.cateName} + '] - ' + ${qnaView.typeName}"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>제목</td>
+                    <td th:text="${qnaView.title}"></td>
+                </tr>
+                <tr>
+                    <td>내용</td>
+                    <td th:text="${qnaView.content}"></td>
+                </tr>
+                <tr th:if="${qnaView.answerComplete == 0}">
+                    <td>답변</td>
+                    <td></td>
+                </tr>
+                <tr th:if="${qnaView.answerComplete == 1}">
+                    <td>답변</td>
+                    <td></td>
+                </tr>
+                <tr th:if="${qnaView.answerComplete == 2}">
+                    <td>답변</td>
+                    <td th:text="${qnaView.answer}"></td>
+                </tr>
+            </table>
+            <div style="text-align: right;">
+                <a th:style="'font-size: 20px;'" class="linkBtn" th:href="@{/admin/qna/delete(qnaNo=${qnaView.qnaNo})}">삭제</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a th:style="'font-size: 20px;'" class="linkBtn" th:href="@{/admin/qna/write(qnaNo=${qnaView.qnaNo})}">답변작성</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a th:style="'font-size: 20px;'" class="linkBtn mainBtn" th:href="@{/admin/qna/list}">목록</a>
+            </div>
+        </article>
+    </section>
+</main>
+    <div th:replace="~{/admin/footer :: footer}"></div>
+</body>
+</html>

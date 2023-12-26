@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{cs/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<th:block layout:fragment="content">
+<section id="cs">
+    <div class="qna">
+        <nav>
+            <div>
+                <p>
+                    <a th:href="@{/cs/index}">홈</a><span>&gt;</span>
+                    <a th:href="@{/cs/qna/list(cate=member)}">문의하기</a>
+                </p>
+            </div>
+        </nav>
+
+        <section class="view">
+            <aside>
+                <h2>문의하기</h2>
+                <ul>
+                    <li class="${cateDto.getCate() eq 'member' ? 'on' : '' }">
+                        <a th:href="@{/cs/qna/list(cate=member)}">회원</a>
+                    </li>
+                    <li class="${cateDto.getCate() eq 'coupon' ? 'on' : '' }">
+                        <a th:href="@{/cs/qna/list(cate=coupon)}">쿠폰/이벤트</a>
+                    </li>
+                    <li class="${cateDto.getCate() eq 'order' ? 'on' : '' }">
+                        <a th:href="@{/cs/qna/list(cate=order)}">주문/결제</a>
+                    </li>
+                    <li class="${cateDto.getCate() eq 'delivery' ? 'on' : '' }">
+                        <a th:href="@{/cs/qna/list(cate=delivery)}">배송</a>
+                    </li>
+                    <li class="${cateDto.getCate() eq 'cancel' ? 'on' : '' }">
+                        <a th:href="@{/cs/qna/list(cate=cancel)}">취소/반품/교환</a>
+                    </li>
+                    <li class="${cateDto.getCate() eq 'travel' ? 'on' : '' }">
+                        <a th:href="@{/cs/qna/list(cate=travel)}">여행/숙박/항공</a>
+                    </li>
+                    <li class="${cateDto.getCate() eq 'safe' ? 'on' : '' }">
+                        <a th:href="@{/cs/qna/list(cate=safe)}">안전거래</a>
+                    </li>
+                </ul>
+            </aside>
+
+            <article>
+                <nav>
+                    <h2 class="title">
+                        [<span th:text="${qna.typeName}"></span>]
+                        [[${qna.title}]]
+                    </h2>
+                    <p>
+                        <span>
+                            [[${qna.writer}]]
+                        </span>
+                        <span class="date"
+                              th:text="${#temporals.format(qna.rdate, 'yy-MM-dd')}">
+                        </span>
+                    </p>
+                    <th:block th:if="${qna.file1 != null}">
+                        <a class="filedown"
+                           th:href="@{/cs/qna/download(qnaNo=${qna.qnaNo})}">
+                            첨부된 파일 : <span th:text="${qna.file2}"></span>
+                        </a>
+                    </th:block>
+                </nav>
+
+                <div class="content">
+                    <p>
+                        [[${qna.content}]]
+                    </p>
+                    <p>
+                        ※ 피싱 관련 피해신고<br/><br/>
+                        ▶ 경찰청 사이버수사국 (국번없이)182 :
+                        http://cyberbureau.police.go.kr<br/>
+                        ▶ KISA 인터넷침해대응센터 (국번없이)118 :
+                        http://www.krcert.or.kr<br/>
+                        감사합니다.<br/>
+                    </p>
+                </div>
+
+                <section class="commentList">
+                    <article class="comments">
+                        <div th:if="${qna.answer != null}">
+                            <h3>[답변] &gt;</h3>
+                            <textarea class="comment" name="comment" th:text="${qna.answer}" readonly></textarea>
+                        </div>
+                        <div th:unless="${qna.answer != null}">
+                            <p class="empty">등록된 댓글이 없습니다.</p>
+                        </div>
+                    </article>
+                </section>
+                <a href="#" class="btnList">목록보기</a>
+            </article>
+        </section>
+    </div>
+</section>

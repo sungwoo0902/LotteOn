@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{cs/fragments/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<th:block layout:fragment="content">
+<section id="cs">
+    <div class="qna">
+        <nav>
+            <div>
+                <p>
+                    <a th:href="@{/cs/index}">홈</a><span>&gt;</span>
+                    <a th:href="@{/cs/qna/list(cate=member)}">문의하기</a>
+                </p>
+            </div>
+        </nav>
+
+        <section id="pageCss" class="write">
+            <aside>
+                <h2>문의하기</h2>
+                <ul>
+                    <li class="${cateDto.getCate() eq 'member' ? 'on' : '' }">
+                        <a th:href="@{/cs/qna/list(cate=member)}">회원</a>
+                    </li>
+                    <li class="${cateDto.getCate() eq 'coupon' ? 'on' : '' }">
+                        <a th:href="@{/cs/qna/list(cate=coupon)}">쿠폰/이벤트</a>
+                    </li>
+                    <li class="${cateDto.getCate() eq 'order' ? 'on' : '' }">
+                        <a th:href="@{/cs/qna/list(cate=order)}">주문/결제</a>
+                    </li>
+                    <li class="${cateDto.getCate() eq 'delivery' ? 'on' : '' }">
+                        <a th:href="@{/cs/qna/list(cate=delivery)}">배송</a>
+                    </li>
+                    <li class="${cateDto.getCate() eq 'cancel' ? 'on' : '' }">
+                        <a th:href="@{/cs/qna/list(cate=cancel)}">취소/반품/교환</a>
+                    </li>
+                    <li class="${cateDto.getCate() eq 'travel' ? 'on' : '' }">
+                        <a th:href="@{/cs/qna/list(cate=travel)}">여행/숙박/항공</a>
+                    </li>
+                    <li class="${cateDto.getCate() eq 'safe' ? 'on' : '' }">
+                        <a th:href="@{/cs/qna/list(cate=safe)}">안전거래</a>
+                    </li>
+                </ul>
+            </aside>
+
+            <article>
+                <form id="writeForm" th:action="@{/cs/qna/write}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="writer" id="writer">
+                    <table>
+                        <tr>
+                            <td>문의유형</td>
+                            <td>
+                                <select id="cate" name="cate" required>
+                                    <option selected disabled value="0">1차 분류 선택</option>
+                                    <th:block th:each="cateOption : ${cates}">
+                                        <option th:value="${cateOption.cate}" th:text="${cateOption.cateName}"></option>
+                                    </th:block>
+                                </select>
+
+                                <select name="type" id="type" required>
+                                    <option selected disabled value="0">2차 분류 선택</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>문의제목</td>
+                            <td>
+                                <input type="text" name="title" required placeholder="제목을 입력하세요."/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>문의내용</td>
+                            <td>
+                                <textarea name="content" required placeholder="내용을 입력하세요."></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td calss="form-group fileUpload">
+                                <label>첨부파일</label>
+                                <td>
+                                    <input type="file" name="mfile1" multiple/>
+                                </td>
+                            </td>
+                        </tr>
+                    </table>
+                    <div>
+                        <input type="submit" class="btnSubmit" value="등록하기"/>
+                        <a href="#" class="btnList">취소하기</a>
+                    </div>
+                </form>
+            </article>
+        </section>
+    </div>
+</section>
+    <script>
+        let memberUid = window.localStorage.getItem('memberUid');
+        console.log(memberUid);
+        $('#writer').val(memberUid);
+        console.log($('#writer').val());
+
+
+/*
+
+        $(function(){
+            let writeForm = $('#writeForm');
+            // 정규식으로 특정 확장자 업로드 못하게 막기
+            let regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+            let maxSize = 1024 * 1024 * 10; // 최대 업로드 10MB
+            const url = "/cs/files";
+
+            function checkExtension(fileName, fileSize){
+                if(fileSize >= maxSize){
+                    alert("최대 10MB까지 업로드 가능합니다.");
+                    return false
+                }
+
+                if(regex.test(fileName)){
+                    alert("해당 확장자는 업로드 할 수 없습니다.");
+                    return false
+                }
+                return true
+            }
+
+            $("input[type=file]").change(function(){
+                let formData = new formData();
+                let inputFile = $("input[name=file]");
+                let files = inputFile[0].files;
+
+                for(let i = 0; i < files.length; i++){
+                    if(!checkExtension(files[i].name, files[i].size)){
+                        return false
+                    }
+                    formData.append("uploadFile", files[i]);
+                }
+
+                $.ajax({
+                    url : url,
+                    type : "POST",
+                    contentType : false,    // 인코딩 타입 적용 x
+                    processData : false,    // 쿼리스트링 생성 x
+                    data: formData,
+                    dataType : "json",
+                    success: function(result){
+                        console.log(result);
+
+
+                        // showUploadResult(result);
+                    }
+                });
+            });
+
+
+            $('.btnSubmit').click(function(e){
+                e.preventDefault();
+                console.log("submit clicked");
+            });
+        });
+*/
+
+    </script>
+<script src="/cs/js/writeType.js"></script>
+</th:block>
+</html>
